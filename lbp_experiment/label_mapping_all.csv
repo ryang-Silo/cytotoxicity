@@ -1,0 +1,25 @@
+,Object Id,Interpretation,label
+0,ORM-0364078,non-toxic,non-toxic
+1,ORM-0364078,non-toxic,non-toxic
+2,ORM-0364074,non-toxic,non-toxic
+3,ORM-0364074,non-toxic,non-toxic
+4,ORM-0049279,"cytotoxic, mitotoxic",toxic
+5,ORM-0049279,"cytotoxic, mitotoxic",toxic
+6,ORM-0120988,"cytotoxic, mitotoxic",toxic
+7,ORM-0120988,"cytotoxic, mitotoxic",toxic
+8,ORM-0140940,"cytotoxic, non-mitotoxic",toxic
+9,ORM-0140940,"cytotoxic, non-mitotoxic",toxic
+10,ORM-0140942,"cytotoxic, mitotoxic",toxic
+11,ORM-0140942,"cytotoxic, mitotoxic",toxic
+12,ORM-0149820,"cytotoxic, mitotoxic",toxic
+13,ORM-0149820,"cytotoxic, mitotoxic",toxic
+14,ORM-0178130,"cytotoxic, mitotoxic",toxic
+15,ORM-0178130,"cytotoxic, mitotoxic",toxic
+16,ORM-0226420,mildly affects cell health,toxic
+17,ORM-0226420,mildly affects cell health,toxic
+18,DMSO,non-toxic,non-toxic
+19,DMSO,non-toxic,non-toxic
+20,DMSO,non-toxic,non-toxic
+21,DMSO,non-toxic,non-toxic
+22,POS1,cytotoxic,toxic
+23,POS1,cytotoxic,toxic
