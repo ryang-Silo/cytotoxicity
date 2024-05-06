@@ -1,0 +1,6 @@
+problem compound ORM-0293612_230817GA24B0 missed several images! 152
+problem compound ORM-0293667_230817GA24B0 missed several images! 150
+
+
+compound ORM-0371353_230824GA24B0 doesn't exist here!
+compound ORM-0371350_230824GA24B0 doesn't exist here!

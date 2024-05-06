@@ -1,0 +1,11 @@
+Object Id,Highest Tested Concentration uM,Lowest Precipitated Concentration uM,Cell count IC50 uM,Cell count LEC uM,Nucleus Intensity EC50 uM,Nucleus Intensity LEC uM,Nucleus Area IC50 uM,Nucleus Area LEC uM,Plasma membrane permeability EC50 uM,PMP LEC uM,Lysosomal activity EC50 uM,Lysosomal activity LEC uM,MitoArea EC50 uM,MitoArea LEC uM,MMP EC50 uM,MMP LEC uM,Interpretation
+ORM-0364078,200,-,>200,>200,>200,>200,>200,>200,>200,>200,>200,>200,>200,>200,>200,>200,non-toxic
+ORM-0364074,200,-,>200,>200,>200,>200,>200,>200,>200,>200,>200,>200,>200,>200,>200,>200,non-toxic
+ORM-0049279,200,-,30.6,26.7,42.3,26.7,26.3,20.06,41.8,35.6,>200,47.5,26.3,26.7,>200,63.3,"cytotoxic, mitotoxic"
+ORM-0120988,200,-,82.4,47.5,95.8,84.4,77.8,63.3,154.3,113,>200,26.7,75.6,63.3,>200,20.06,"cytotoxic, mitotoxic"
+ORM-0140940,200,-,>200,>200,>200,200,>200,200,>200,>200,>200,150,>200,>200,>200,>200,"cytotoxic, non-mitotoxic"
+ORM-0140942,200,-,35.8,26.7,52.2,26.7,25.1,20.06,48.9,35.6,4.4,5.015,36.6,26.7,56,63.3,"cytotoxic, mitotoxic"
+ORM-0149820,200,200,>150,20.06,>150,>150,>150,>150,>150,>150,>150,1.254,>150,>150,8.3,10.03,"cytotoxic, mitotoxic"
+ORM-0178130,200,-,55.4,47.5,67.7,20.06,34,20.06,75.9,47.5,6,2.508,58.9,47.5,9.2,10.03,"cytotoxic, mitotoxic"
+ORM-0226420,100,-,>100,>100,>100,>100,>100,56.3,>100,>100,>100,13.4,>100,13.4,>100,>100,mildly affects cell health
+DMSO,>200,-,>>200,>>200,>>200,>>200,>>200,>>200,>>200,>>200,>>200,>>200,>>200,>>200,>>200,>>200,non-toxic
