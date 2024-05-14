@@ -9,10 +9,12 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 import torch.nn as nn
 import torch.optim as optim
-from cyto_loader import cytoDataset, Normaliztion, ToTensor, Rescale, RandomHorizontalFlip, RandomCrop, CenterCrop#, RandomHorizontalFlip2CHNL, Rescale2CHNL, RandomCrop2CHNL,Rescale2CHNL, CenterCrop2CHNL 
+from cyto_loader import cytoDataset, Normaliztion, ToTensor, Rescale, RandomHorizontalFlip, RandomCrop, CenterCrop #, worker_init_fn #, RandomHorizontalFlip2CHNL, Rescale2CHNL, RandomCrop2CHNL,Rescale2CHNL, CenterCrop2CHNL 
 from i3d import InceptionI3d
 import cv2
 import matplotlib.pyplot as plt 
+
+from azureml.fsspec import AzureMachineLearningFileSystem
 
 channel_minmax = {1: [179, 65535],
                 2: [345, 65535],
@@ -20,8 +22,12 @@ channel_minmax = {1: [179, 65535],
                 4: [144, 10705],
                 5: [3621, 65535]}
 
-root_dir = '/Volumes/KINGSTON/Orion/reference_dataset_compounds_v1'
-outmodel_dir = '/Users/ruijingyang/VSProjects/Orion-Cytox/src/cytotoxicity/models'
+root_dir = 'reference_dataset_compounds_v2'
+outmodel_dir = os.path.join('/home/azureuser/cloudfiles/code/workspace', 'models')
+os.makedirs(outmodel_dir, exist_ok=True)
+uri = 'azureml://subscriptions/25130c3f-778b-4637-bfb8-3b1b885b45e7/resourcegroups/rg-silo-dev-003/workspaces/aml-silo-dev-003/datastores/workspaceblobcompound/paths'
+# create the filesystem
+fs = AzureMachineLearningFileSystem(uri)
 
 def show_cam_on_image(img, mask, outdir, val=False):
     heatmap = cv2.applyColorMap(np.uint8(255*mask), cv2.COLORMAP_JET)
@@ -129,8 +135,8 @@ def train_test(args):
             os.makedirs(outdir, exist_ok=True)
         log_file = open(outdir+'/'+ args.log+'_log' + str(index) + '.txt', 'w')
         
-        trainval_list = '/Users/ruijingyang/VSProjects/Orion-Cytox/src/cytotoxicity/data/train_test_folds/train_fold_'+'%d' % (index)+'_info.txt' 
-        test_list = '/Users/ruijingyang/VSProjects/Orion-Cytox/src/cytotoxicity/data/train_test_folds/test_fold_'+'%d' % (index)+'_info.txt' 
+        trainval_list = '/home/azureuser/cloudfiles/code/workspace/cytotoxicity/data/train_test_folds/train_fold_'+'%d' % (index)+'_info.txt' 
+        test_list = '/home/azureuser/cloudfiles/code/workspace/cytotoxicity/data/train_test_folds/test_fold_'+'%d' % (index)+'_info.txt' 
        
 
         log_file.write('cross-valid : %d'%(index))
@@ -144,7 +150,7 @@ def train_test(args):
             log_file.write('finetune!\n')
             log_file.flush()
  
-            mdlroot = '/research/cmv/personal/ryang/outputmodel/rgb_flow_mdl'
+            mdlroot = 'outputmodel/rgb_flow_mdl'
             model = InceptionI3d(mdlroot, num_classes=2)
             model = model.to(device) #.cuda()
               
@@ -176,7 +182,7 @@ def train_test(args):
         
         # train
         for epoch in range(args.epochs): 
-            scheduler.step()
+            
             #only update lr for i3d, not for attention
 #             if (epoch + 1) % args.step_size == 0:
 #                 optimizer.param_groups[0]['lr'] *= args.gamma
@@ -186,10 +192,10 @@ def train_test(args):
             train_loss = AverageMeter()
             ttop1 = AverageMeter()
             model.train()
-
+    
             # load random 16-frame clip data every epoch
-            cyto_train = cytoDataset(trainval_list, root_dir, transform=transforms.Compose([Normaliztion(), Rescale((384,384)),RandomCrop((256,256)),RandomHorizontalFlip(), ToTensor()]))
-            dataloader_train = DataLoader(cyto_train, batch_size=args.batch_size, shuffle=True, num_workers=2, drop_last=True)
+            cyto_train = cytoDataset(filesystem=fs, cv_info=trainval_list, root_dir=root_dir, transform=transforms.Compose([Normaliztion(), Rescale((384,384)),RandomCrop((256,256)),RandomHorizontalFlip(), ToTensor()]))
+            dataloader_train = DataLoader(cyto_train, batch_size=args.batch_size, shuffle=True, num_workers=0, drop_last=True)
 
             for i, sample_batched in enumerate(dataloader_train):
                 inputs, label = sample_batched['video'].to(device), sample_batched['label'].to(device)
@@ -211,7 +217,8 @@ def train_test(args):
                       
                 loss.backward()
                 optimizer.step()
-
+                
+                
                 running_loss_total += loss.item()    
                 train_loss.update(loss.item(), 1)  
 
@@ -240,7 +247,9 @@ def train_test(args):
                     # plt.close()
 #                 if i == 0:
 #                     break
-#                 
+
+#   
+                scheduler.step()
             log_file.write('epoch:%d, lr=%f, train_epoch_loss= %.4f' % (epoch + 1, cur_lr, train_loss.avg))
             log_file.write("\n")
             log_file.flush()
@@ -252,8 +261,8 @@ def train_test(args):
             top1 = AverageMeter()
             count_5 = 0
 
-            cyto_test = cytoDataset(test_list, root_dir, transform=transforms.Compose([Normaliztion(), Rescale((300,230)), CenterCrop((224,224)), ToTensor()]))
-            dataloader_test = DataLoader(cyto_test, batch_size=1, shuffle=False, num_workers=1)
+            cyto_test = cytoDataset(filesystem=fs, cv_info=test_list, root_dir=root_dir, transform=transforms.Compose([Normaliztion(), Rescale((300,230)), CenterCrop((224,224)), ToTensor()]))
+            dataloader_test = DataLoader(cyto_test, batch_size=1, shuffle=False, num_workers=0)
 
             with torch.no_grad():               
                 for i, sample_batched in enumerate(dataloader_test):
