@@ -2,7 +2,7 @@ import os
 from azure.storage.blob import BlobServiceClient
 from azure.storage.blob import ContainerClient
 
-storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=cytotoxstorageaccount;AccountKey=o1S2QHEh/t24vV3lMUoL9Q1wbldlWIY4LIn/KrGTCN21xK30D2bCVVucMC1FsaybfYc1P9BycXZJ+AStf0AK8g==;EndpointSuffix=core.windows.net' 
+storage_connection_string = ''
 # blob_service_client = BlobServiceClient.from_connection_string(storage_connection_string)
 
 # data_container_url = 'https://cytotoxstorageaccount.blob.core.windows.net/compounds-images'

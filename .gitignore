@@ -1,7 +1,11 @@
 models/*
 tempdata/*
 sample_files/*
-
+data/processed_traintest_data/*
+data/processed_traintest_data_fold4/*
+data/calculated_subsample_minmax_fold1/*
+data/processed_normed_fold1/*
+resnet_experiment/checkpoints/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
